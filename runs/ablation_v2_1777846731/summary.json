@@ -1,0 +1,7 @@
+{
+  "generations_run": 6,
+  "final_accuracy": 0.8,
+  "final_genome_hash": "a7872be71d",
+  "no_guard": true,
+  "tag": "ablation_v2"
+}

@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+runs/_*.txt
+data/hotpot_*
+.DS_Store
+
