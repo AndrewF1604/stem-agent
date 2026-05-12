@@ -1,13 +1,15 @@
 """Evolution loop: the stem agent's differentiation process.
 
 Per generation:
-  1. Run current phenotype on the validation batch.
-  2. If accuracy is high enough, stop.
-  3. Ask the proposer to read failed trajectories and propose 3 mutations.
-  4. Evaluate each mutation on the same batch.
-  5. Pick the best mutation that beats current fitness; check canary set
-     (questions previously solved); accept or rollback.
+  1. Run current phenotype on the val batch → fitness.
+  2. Run current phenotype on the train batch → failure trajectories for proposer.
+  3. If val accuracy is high enough, stop.
+  4. Proposer reads train failures and proposes 3 mutations.
+  5. Evaluate each mutation on val → accept/reject by fitness + canary.
   6. Snapshot genome, log, repeat.
+
+Train and val are disjoint by construction (see eval.load_splits). Test is
+never touched by this loop — only by eval.py --final.
 """
 from __future__ import annotations
 
@@ -18,7 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from agent import build_agent_fn
-from eval import RUNS_DIR, evaluate, load_questions
+from eval import RUNS_DIR, evaluate, load_splits, split_class_balance
 from genome import Genome, initial_population
 from mutations import Mutation, propose_mutations
 
@@ -31,8 +33,9 @@ class GenerationLog:
     gen: int
     parent_hash: str
     chosen_hash: str
-    accuracy_before: float
-    accuracy_after: float
+    accuracy_before: float       # val fitness of parent
+    accuracy_after: float        # val fitness of best candidate
+    train_acc_before: float | None  # train accuracy of parent (proposer source)
     diagnosis: str
     mutations_tried: list[dict] = field(default_factory=list)
     accepted: bool = False
@@ -46,15 +49,16 @@ def _eval_genome(genome: Genome, questions, label: str) -> dict:
     return evaluate(build_agent_fn(genome), questions, label=label, verbose=False)
 
 
-def _select_initial(seeds: list[Genome], questions, run_dir: Path) -> tuple[Genome, dict]:
-    """Phase A — score each seed on validation, pick the best as G0."""
-    print(f"\n=== Phase A: scoring {len(seeds)} seed genomes ===")
+def _select_initial(seeds: list[Genome], val_questions, run_dir: Path) -> tuple[Genome, dict]:
+    """Phase A — score each seed on val, pick best as G0. Val is used for selection
+    so the choice is comparable to subsequent generation fitness."""
+    print(f"\n=== Phase A: scoring {len(seeds)} seed genomes on val ===")
     best_genome, best_result = None, None
     for i, g in enumerate(seeds):
         print(f"  seed {i + 1}/{len(seeds)}: {g.notes}")
-        result = _eval_genome(g, questions, label=f"seed_{i}")
+        result = _eval_genome(g, val_questions, label=f"seed_{i}")
         acc = result["metrics"]["accuracy"]
-        print(f"    -> accuracy={acc:.2f}, cost=${result['metrics']['total_cost_usd']:.3f}")
+        print(f"    -> val accuracy={acc:.2f}, cost=${result['metrics']['total_cost_usd']:.3f}")
         (run_dir / f"seed_{i}_g{g.hash()}.json").write_text(
             json.dumps({"genome": g.model_dump(), **result}, indent=2), encoding="utf-8"
         )
@@ -63,22 +67,42 @@ def _select_initial(seeds: list[Genome], questions, run_dir: Path) -> tuple[Geno
     return best_genome, best_result
 
 
-def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int) -> Path:
+def evolve(
+    generations: int,
+    no_guard: bool,
+    tag: str,
+    seed: int,
+    train_n: int,
+    val_n: int,
+) -> Path:
     run_dir = RUNS_DIR / f"{tag}_{int(time.time())}"
     run_dir.mkdir(parents=True, exist_ok=True)
     print(f"Run dir: {run_dir}")
 
-    val_questions = load_questions(n=val_size, seed=seed, split="validation")
-    canary_questions: list = []
+    splits = load_splits(seed=seed, train_n=train_n, val_n=val_n, test_n=10)
+    train_q = splits["train"]
+    val_q = splits["val"]
+    print(f"\n=== Splits (guaranteed disjoint) ===")
+    for name, b in split_class_balance(splits).items():
+        print(f"  {name}: total={b['total']}  comparison={b['comparison']}  bridge={b['bridge']}")
+    # save splits metadata for the writeup
+    (run_dir / "splits_metadata.json").write_text(json.dumps({
+        "seed": seed,
+        "balance": split_class_balance(splits),
+        "train_qids": [q.qid for q in train_q],
+        "val_qids": [q.qid for q in val_q],
+        "test_qids": [q.qid for q in splits["test"]],
+    }, indent=2), encoding="utf-8")
 
     seeds = initial_population()
-    current, current_result = _select_initial(seeds, val_questions, run_dir)
+    current, current_result = _select_initial(seeds, val_q, run_dir)
     current.save(run_dir / f"genome_g0_{current.hash()}.yaml")
 
+    # canary: val questions G0 solves correctly
     canary_questions = [
-        q for q, rec in zip(val_questions, current_result["records"]) if rec["correct"]
+        q for q, rec in zip(val_q, current_result["records"]) if rec["correct"]
     ]
-    print(f"\nCanary set size (questions G0 solves): {len(canary_questions)}")
+    print(f"\nCanary set size (val questions G0 solves): {len(canary_questions)}")
 
     history: list[GenerationLog] = []
     plateau = 0
@@ -86,15 +110,20 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
     for gen in range(1, generations + 1):
         print(f"\n=== Generation {gen} ===")
         if current_result["metrics"]["accuracy"] >= ACCURACY_TARGET:
-            print(f"Stop: accuracy {current_result['metrics']['accuracy']:.2f} >= target")
+            print(f"Stop: val accuracy {current_result['metrics']['accuracy']:.2f} >= target")
             break
 
-        failed = [r for r in current_result["records"] if not r["correct"]]
+        # Run current on TRAIN to source failure trajectories for proposer.
+        # This is the disjointness fix: train ≠ val, proposer never sees val.
+        train_result = _eval_genome(current, train_q, label=f"g{gen}_train_failures")
+        train_acc = train_result["metrics"]["accuracy"]
+        failed = [r for r in train_result["records"] if not r["correct"]]
+        print(f"  train acc of parent: {train_acc:.2f} ({len(failed)} failures for proposer)")
+
         if not failed:
-            print("Stop: no failures to learn from")
+            print("Stop: no failures on train to learn from")
             break
 
-        print(f"Asking proposer to read {len(failed)} failed trajectories...")
         try:
             diagnosis, mutations = propose_mutations(current, failed)
         except Exception as e:
@@ -110,8 +139,8 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
                 print(f"  skip {m.kind}: apply error: {e}")
                 continue
             print(f"  trying {m.kind}: {m.rationale[:100]}")
-            child_result = _eval_genome(child, val_questions, label=f"g{gen}_{m.kind}")
-            print(f"    -> accuracy={child_result['metrics']['accuracy']:.2f}")
+            child_result = _eval_genome(child, val_q, label=f"g{gen}_{m.kind}")
+            print(f"    -> val accuracy={child_result['metrics']['accuracy']:.2f}")
             candidates.append((m, child, child_result))
 
         if not candidates:
@@ -120,6 +149,7 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
                 gen=gen, parent_hash=current.hash(), chosen_hash=current.hash(),
                 accuracy_before=current_result["metrics"]["accuracy"],
                 accuracy_after=current_result["metrics"]["accuracy"],
+                train_acc_before=train_acc,
                 diagnosis=diagnosis, mutations_tried=[], accepted=False,
                 rollback_reason="no candidates",
             ))
@@ -139,13 +169,15 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
         log = GenerationLog(
             gen=gen, parent_hash=current.hash(), chosen_hash=best_child.hash(),
             accuracy_before=current_acc, accuracy_after=best_acc,
+            train_acc_before=train_acc,
             diagnosis=diagnosis,
             mutations_tried=[
                 {"kind": m.kind, "rationale": m.rationale,
                  "accuracy": r["metrics"]["accuracy"], "hash": c.hash()}
                 for m, c, r in candidates
             ],
-            cost_usd=sum(r["metrics"]["total_cost_usd"] for _, _, r in candidates),
+            cost_usd=sum(r["metrics"]["total_cost_usd"] for _, _, r in candidates)
+                     + train_result["metrics"]["total_cost_usd"],
         )
 
         if best_acc <= current_acc:
@@ -174,7 +206,7 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
                 current = best_child
                 current_result = best_child_result
                 current.save(run_dir / f"genome_g{gen}_{current.hash()}.yaml")
-                print(f"  ACCEPT  acc {current_acc:.2f} -> {best_acc:.2f}")
+                print(f"  ACCEPT  val acc {current_acc:.2f} -> {best_acc:.2f}")
                 plateau = 0
 
         history.append(log)
@@ -189,10 +221,13 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
     current.save(run_dir / "best_genome.yaml")
     summary = {
         "generations_run": len(history),
-        "final_accuracy": current_result["metrics"]["accuracy"],
+        "final_val_accuracy": current_result["metrics"]["accuracy"],
         "final_genome_hash": current.hash(),
         "no_guard": no_guard,
         "tag": tag,
+        "train_n": train_n,
+        "val_n": val_n,
+        "seed": seed,
     }
     (run_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"\n=== Done ===\n{json.dumps(summary, indent=2)}")
@@ -202,13 +237,13 @@ def evolve(generations: int, val_size: int, no_guard: bool, tag: str, seed: int)
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--generations", type=int, default=6)
-    p.add_argument("--val-size", type=int, default=5)
+    p.add_argument("--train-n", type=int, default=15, help="Training-set size (proposer reads these failures)")
+    p.add_argument("--val-n", type=int, default=10, help="Validation-set size (fitness eval)")
     p.add_argument("--seed", type=int, default=42)
-    p.add_argument("--no-guard", action="store_true",
-                   help="Ablation: disable regression guard")
+    p.add_argument("--no-guard", action="store_true", help="Ablation: disable regression guard")
     p.add_argument("--tag", type=str, default="evolve")
     args = p.parse_args()
-    evolve(args.generations, args.val_size, args.no_guard, args.tag, args.seed)
+    evolve(args.generations, args.no_guard, args.tag, args.seed, args.train_n, args.val_n)
 
 
 if __name__ == "__main__":

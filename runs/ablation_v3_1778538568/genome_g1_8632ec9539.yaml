@@ -6,8 +6,9 @@ system_prompt: You are a research agent answering multi-hop factual questions. U
 architecture: react
 tools:
 - web_search
-max_steps: 5
+max_steps: 4
 reflection_enabled: false
-generation: 0
-parent_hash: null
-notes: 'seed: ReAct with web_search, generous step budget'
+generation: 1
+parent_hash: 893522b8f4
+notes: 'ADJUST_MAX_STEPS 3->4: One extra search step may let the agent disambiguate
+  exact phrasing before answering without greatly increasing waste.'

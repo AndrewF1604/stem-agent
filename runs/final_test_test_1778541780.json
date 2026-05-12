@@ -1,0 +1,1003 @@
+{
+  "metrics": {
+    "label": "final_test_test",
+    "n_trials": 3,
+    "accuracy_mean": 0.7666666666666666,
+    "accuracy_std": 0.04714045207910321,
+    "accuracy_per_trial": [
+      0.8,
+      0.7,
+      0.8
+    ],
+    "accuracy_min": 0.7,
+    "accuracy_max": 0.8,
+    "n_per_trial": 10,
+    "total_cost_usd": 0.0725046
+  },
+  "trials": [
+    {
+      "metrics": {
+        "label": "final_test_test_t0",
+        "accuracy": 0.8,
+        "n": 10,
+        "total_cost_usd": 0.025294349999999997,
+        "avg_latency_s": 4.43693253993988,
+        "avg_steps": 1.2,
+        "wall_time_s": 55.771822690963745
+      },
+      "records": [
+        {
+          "qid": "5ab9180b5542991b5579f0f3",
+          "question": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?",
+          "gold": "South Korea",
+          "answer": "South Korea.",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly, stating South Korea.",
+          "cost_usd": 0.00228825,
+          "latency_s": 4.043440580368042,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "South Korea."
+            },
+            {
+              "role": "assistant",
+              "content": "South Korea.",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5abb326055429966062416e7",
+          "question": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?",
+          "gold": "Bury St Edmunds",
+          "answer": "Bury St Edmunds",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer: Bury St Edmunds.",
+          "cost_usd": 0.0034990499999999996,
+          "latency_s": 6.842933893203735,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Bury St Edmunds."
+            },
+            {
+              "role": "assistant",
+              "content": "Bury St Edmunds",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a8ef1e35542995a26add57a",
+          "question": "The creator of the Lisa Simpson character was born in what year?",
+          "gold": "1954",
+          "answer": "1954",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly.",
+          "cost_usd": 0.0022797,
+          "latency_s": 3.3453922271728516,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The creator of the Lisa Simpson character was born in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1954"
+            },
+            {
+              "role": "assistant",
+              "content": "1954",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5adf03b35542993a75d263d3",
+          "question": "Where is the international airport which Eagle Aviation wet lease operations were based in located ",
+          "gold": "France.",
+          "answer": "Yes, Paris Charles de Gaulle Airport, near Paris, France.",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Paris Charles de Gaulle Airport and states it is in France, which matches the gold answer.",
+          "cost_usd": 0.00229935,
+          "latency_s": 3.479510545730591,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Where is the international airport which Eagle Aviation wet lease operations were based in located "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Paris Charles de Gaulle Airport, in Roissy-en-France, near Paris, France."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Paris Charles de Gaulle Airport, near Paris, France.",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a88d745554299206df2b378",
+          "question": "What occupation was shared by David Yates and Pietro Germi?",
+          "gold": "director",
+          "answer": "film director",
+          "correct": true,
+          "judge_reasoning": "\"Film director\" is a correct paraphrase of the gold answer \"director.\"",
+          "cost_usd": 0.00224325,
+          "latency_s": 4.172949552536011,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What occupation was shared by David Yates and Pietro Germi?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Film director"
+            },
+            {
+              "role": "assistant",
+              "content": "film director",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ab3bacc55429969a97a8197",
+          "question": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? ",
+          "gold": "Noel Gallagher",
+          "answer": "Noel Gallagher",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly: Noel Gallagher.",
+          "cost_usd": 0.00232935,
+          "latency_s": 2.364440679550171,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Liam Gallagher"
+            },
+            {
+              "role": "assistant",
+              "content": "Noel Gallagher",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a7f244255429934daa2fcec",
+          "question": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?",
+          "gold": "Grammar, logic, and rhetoric",
+          "answer": "humanities, sciences, and languages",
+          "correct": false,
+          "judge_reasoning": "The candidate answer does not match the gold answer; the core subjects were grammar, logic, and rhetoric, not humanities, sciences, and languages.",
+          "cost_usd": 0.0034773000000000004,
+          "latency_s": 4.478103160858154,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "humanities, sciences, and language"
+            },
+            {
+              "role": "assistant",
+              "content": "humanities, sciences, and languages",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ac39f7b554299218029dbe7",
+          "question": "Robert Earl Holding owned an oil company that was originally founded by who?",
+          "gold": "Harry F. Sinclair",
+          "answer": "Yes \u2014 Harry F. Sinclair",
+          "correct": true,
+          "judge_reasoning": "The candidate names the same founder as the gold answer, despite the extra affirmation.",
+          "cost_usd": 0.00232155,
+          "latency_s": 4.816664695739746,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Robert Earl Holding owned an oil company that was originally founded by who?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "His oil company, Sinclair Oil, was originally founded by **Harry F. Sinclair**."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes \u2014 Harry F. Sinclair",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a810d7655429903bc27b915",
+          "question": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?",
+          "gold": "bass",
+          "answer": "Bass guitar",
+          "correct": true,
+          "judge_reasoning": "\u201cBass guitar\u201d is a semantically equivalent description of \u201cbass,\u201d so the candidate answer matches the gold answer.",
+          "cost_usd": 0.00226215,
+          "latency_s": 7.492332220077515,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Bass guitar."
+            },
+            {
+              "role": "assistant",
+              "content": "Bass guitar",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ae4cb2f55429960a22e01e8",
+          "question": "Which American popular music and country music singer recorded J. D. Souther song ",
+          "gold": "Linda Maria Ronstadt",
+          "answer": "No clear evidence",
+          "correct": false,
+          "judge_reasoning": "The candidate is non-committal and does not identify Linda Ronstadt, the American singer who recorded J. D. Souther's song.",
+          "cost_usd": 0.0022944,
+          "latency_s": 3.3335578441619873,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which American popular music and country music singer recorded J. D. Souther song "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Linda Ronstadt"
+            },
+            {
+              "role": "assistant",
+              "content": "No clear evidence",
+              "reflection": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metrics": {
+        "label": "final_test_test_t1",
+        "accuracy": 0.7,
+        "n": 10,
+        "total_cost_usd": 0.0228225,
+        "avg_latency_s": 3.7610270977020264,
+        "avg_steps": 1.0,
+        "wall_time_s": 49.909048318862915
+      },
+      "records": [
+        {
+          "qid": "5ab9180b5542991b5579f0f3",
+          "question": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?",
+          "gold": "South Korea",
+          "answer": "Yes, South Korea",
+          "correct": true,
+          "judge_reasoning": "The candidate answer identifies the correct country, South Korea, which matches the gold answer despite the extra affirmation.",
+          "cost_usd": 0.0022746,
+          "latency_s": 3.484130859375,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "South Korea"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, South Korea",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5abb326055429966062416e7",
+          "question": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?",
+          "gold": "Bury St Edmunds",
+          "answer": "No, Suffolk",
+          "correct": false,
+          "judge_reasoning": "The candidate does not give the city; it names the county Suffolk instead of the correct city, Bury St Edmunds.",
+          "cost_usd": 0.0022953,
+          "latency_s": 5.582587003707886,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Burton upon Trent"
+            },
+            {
+              "role": "assistant",
+              "content": "No, Suffolk",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a8ef1e35542995a26add57a",
+          "question": "The creator of the Lisa Simpson character was born in what year?",
+          "gold": "1954",
+          "answer": "1954",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly.",
+          "cost_usd": 0.0022757999999999997,
+          "latency_s": 3.0033822059631348,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The creator of the Lisa Simpson character was born in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1954"
+            },
+            {
+              "role": "assistant",
+              "content": "1954",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5adf03b35542993a75d263d3",
+          "question": "Where is the international airport which Eagle Aviation wet lease operations were based in located ",
+          "gold": "France.",
+          "answer": "Yes, Paris Charles de Gaulle Airport in Roissy-en-France, France.",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Paris Charles de Gaulle Airport in Roissy-en-France, France, which matches the gold answer of France.",
+          "cost_usd": 0.0023199,
+          "latency_s": 3.6574463844299316,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Where is the international airport which Eagle Aviation wet lease operations were based in located "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Paris Charles de Gaulle Airport, in Roissy-en-France, France."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Paris Charles de Gaulle Airport in Roissy-en-France, France.",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a88d745554299206df2b378",
+          "question": "What occupation was shared by David Yates and Pietro Germi?",
+          "gold": "director",
+          "answer": "director",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly: both say director.",
+          "cost_usd": 0.0022677000000000005,
+          "latency_s": 2.772785186767578,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What occupation was shared by David Yates and Pietro Germi?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Director"
+            },
+            {
+              "role": "assistant",
+              "content": "director",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ab3bacc55429969a97a8197",
+          "question": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? ",
+          "gold": "Noel Gallagher",
+          "answer": "No \u2014 Noel Gallagher",
+          "correct": true,
+          "judge_reasoning": "The candidate answer identifies Noel Gallagher as the lead vocalist; the added 'No \u2014' does not change the semantic answer.",
+          "cost_usd": 0.0023160000000000004,
+          "latency_s": 4.047734498977661,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Liam Gallagher"
+            },
+            {
+              "role": "assistant",
+              "content": "No \u2014 Noel Gallagher",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a7f244255429934daa2fcec",
+          "question": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?",
+          "gold": "Grammar, logic, and rhetoric",
+          "answer": "No evidence provided",
+          "correct": false,
+          "judge_reasoning": "The candidate answer is non-committal and does not identify the three core subjects: grammar, logic, and rhetoric.",
+          "cost_usd": 0.00229845,
+          "latency_s": 3.416416645050049,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "grammar, logic, and rhetoric"
+            },
+            {
+              "role": "assistant",
+              "content": "No evidence provided",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ac39f7b554299218029dbe7",
+          "question": "Robert Earl Holding owned an oil company that was originally founded by who?",
+          "gold": "Harry F. Sinclair",
+          "answer": "Yes, Harry Sinclair",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies the same founder as the gold answer, with a minor paraphrase of the name.",
+          "cost_usd": 0.002175,
+          "latency_s": 4.698558568954468,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Robert Earl Holding owned an oil company that was originally founded by who?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Harry Sinclair"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Harry Sinclair",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a810d7655429903bc27b915",
+          "question": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?",
+          "gold": "bass",
+          "answer": "bass guitar",
+          "correct": true,
+          "judge_reasoning": "\"Bass guitar\" is a semantically equivalent answer to \"bass\" and identifies the same instrument.",
+          "cost_usd": 0.0022878,
+          "latency_s": 3.914613962173462,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Bass guitar."
+            },
+            {
+              "role": "assistant",
+              "content": "bass guitar",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ae4cb2f55429960a22e01e8",
+          "question": "Which American popular music and country music singer recorded J. D. Souther song ",
+          "gold": "Linda Maria Ronstadt",
+          "answer": "No clear evidence",
+          "correct": false,
+          "judge_reasoning": "The candidate is non-committal and does not identify the singer Linda Maria Ronstadt.",
+          "cost_usd": 0.0023119499999999997,
+          "latency_s": 3.0326156616210938,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which American popular music and country music singer recorded J. D. Souther song "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Linda Ronstadt"
+            },
+            {
+              "role": "assistant",
+              "content": "No clear evidence",
+              "reflection": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metrics": {
+        "label": "final_test_test_t2",
+        "accuracy": 0.8,
+        "n": 10,
+        "total_cost_usd": 0.02438775,
+        "avg_latency_s": 3.554494547843933,
+        "avg_steps": 1.1,
+        "wall_time_s": 46.3094379901886
+      },
+      "records": [
+        {
+          "qid": "5ab9180b5542991b5579f0f3",
+          "question": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?",
+          "gold": "South Korea",
+          "answer": "Yes, South Korea",
+          "correct": true,
+          "judge_reasoning": "The candidate correctly identifies Kim Jong-kook\u2019s country as South Korea; the added \"Yes\" does not change the meaning.",
+          "cost_usd": 0.0022608,
+          "latency_s": 3.661611557006836,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The Running Man Brothers is a South Korean pop duo. Kim Jong-kook is one member and he is from what country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "South Korea"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, South Korea",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5abb326055429966062416e7",
+          "question": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?",
+          "gold": "Bury St Edmunds",
+          "answer": "No: Bury St Edmunds",
+          "correct": true,
+          "judge_reasoning": "The candidate names the same city as the gold answer, Bury St Edmunds, with only a leading qualifier.",
+          "cost_usd": 0.0023220000000000003,
+          "latency_s": 3.171252965927124,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Ruddles Brewery is owned by a pub retailer and brewer based in what city?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Bury St Edmunds"
+            },
+            {
+              "role": "assistant",
+              "content": "No: Bury St Edmunds",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a8ef1e35542995a26add57a",
+          "question": "The creator of the Lisa Simpson character was born in what year?",
+          "gold": "1954",
+          "answer": "Yes, 1954",
+          "correct": true,
+          "judge_reasoning": "The candidate answer states the same year as the gold answer, 1954, with only a prefacing yes.",
+          "cost_usd": 0.0025805999999999997,
+          "latency_s": 3.368134021759033,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "The creator of the Lisa Simpson character was born in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1954"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, 1954",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5adf03b35542993a75d263d3",
+          "question": "Where is the international airport which Eagle Aviation wet lease operations were based in located ",
+          "gold": "France.",
+          "answer": "Yes, Paris Charles de Gaulle Airport in Roissy-en-France, France.",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Paris Charles de Gaulle Airport in Roissy-en-France, which is located in France, matching the gold answer.",
+          "cost_usd": 0.0022884,
+          "latency_s": 3.24647855758667,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Where is the international airport which Eagle Aviation wet lease operations were based in located "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Paris Charles de Gaulle Airport, in Roissy-en-France, France."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Paris Charles de Gaulle Airport in Roissy-en-France, France.",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a88d745554299206df2b378",
+          "question": "What occupation was shared by David Yates and Pietro Germi?",
+          "gold": "director",
+          "answer": "film director",
+          "correct": true,
+          "judge_reasoning": "The candidate answer is a semantically equivalent paraphrase of the gold answer, since both indicate the occupation of director.",
+          "cost_usd": 0.0022871999999999997,
+          "latency_s": 2.9263687133789062,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What occupation was shared by David Yates and Pietro Germi?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Film director"
+            },
+            {
+              "role": "assistant",
+              "content": "film director",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ab3bacc55429969a97a8197",
+          "question": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? ",
+          "gold": "Noel Gallagher",
+          "answer": "Noel Gallagher",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer exactly: Noel Gallagher.",
+          "cost_usd": 0.00352395,
+          "latency_s": 4.77503228187561,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who sang lead vocals on the Oasis hit single which had an acoustic debut in drummer Tony McCarroll's last concert ? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Noel Gallagher"
+            },
+            {
+              "role": "assistant",
+              "content": "Noel Gallagher",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a7f244255429934daa2fcec",
+          "question": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?",
+          "gold": "Grammar, logic, and rhetoric",
+          "answer": "no, philosophy, mathematics, and theology",
+          "correct": false,
+          "judge_reasoning": "The candidate answer gives different subjects and does not match the core three subjects of grammar, logic, and rhetoric.",
+          "cost_usd": 0.0022956,
+          "latency_s": 3.8920228481292725,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "theological, philosophical, and scientific studies"
+            },
+            {
+              "role": "assistant",
+              "content": "no, philosophy, mathematics, and theology",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ac39f7b554299218029dbe7",
+          "question": "Robert Earl Holding owned an oil company that was originally founded by who?",
+          "gold": "Harry F. Sinclair",
+          "answer": "Harry F. Sinclair",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer, Harry F. Sinclair.",
+          "cost_usd": 0.00227895,
+          "latency_s": 3.9627161026000977,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Robert Earl Holding owned an oil company that was originally founded by who?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Harry F. Sinclair"
+            },
+            {
+              "role": "assistant",
+              "content": "Harry F. Sinclair",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5a810d7655429903bc27b915",
+          "question": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?",
+          "gold": "bass",
+          "answer": "Yes \u2014 bass guitar",
+          "correct": true,
+          "judge_reasoning": "The candidate answer identifies the same instrument as the gold answer, with only a paraphrase (\u201cbass guitar\u201d for \u201cbass\u201d).",
+          "cost_usd": 0.0022614,
+          "latency_s": 3.487431526184082,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What instrument does Duff McKagan play on Macy Gray's single, Kissed It?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Bass guitar."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes \u2014 bass guitar",
+              "reflection": true
+            }
+          ]
+        },
+        {
+          "qid": "5ae4cb2f55429960a22e01e8",
+          "question": "Which American popular music and country music singer recorded J. D. Souther song ",
+          "gold": "Linda Maria Ronstadt",
+          "answer": "No clear evidence",
+          "correct": false,
+          "judge_reasoning": "The candidate is non-committal and does not identify the singer; the gold answer is Linda Maria Ronstadt.",
+          "cost_usd": 0.00228885,
+          "latency_s": 3.053896903991699,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which American popular music and country music singer recorded J. D. Souther song "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Linda Ronstadt"
+            },
+            {
+              "role": "assistant",
+              "content": "No clear evidence",
+              "reflection": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

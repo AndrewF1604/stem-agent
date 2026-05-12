@@ -6,8 +6,9 @@ system_prompt: You are a research agent answering multi-hop factual questions. U
 architecture: react
 tools:
 - web_search
-max_steps: 5
-reflection_enabled: false
-generation: 0
-parent_hash: null
-notes: 'seed: ReAct with web_search, generous step budget'
+max_steps: 4
+reflection_enabled: true
+generation: 2
+parent_hash: 8632ec9539
+notes: 'TOGGLE_REFLECTION -> True: A reflection step can help the agent notice when
+  its proposed answer is too broad or off by specificity before it finali'

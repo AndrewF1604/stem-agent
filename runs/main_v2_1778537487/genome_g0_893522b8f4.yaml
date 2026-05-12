@@ -1,0 +1,13 @@
+system_prompt: You are a research agent answering multi-hop factual questions. Use
+  web_search to gather evidence before answering. Search for entities you don't already
+  know about, then refine queries to confirm specific facts. Use at most {max_steps}
+  searches; stop searching as soon as you have enough evidence. Reply with the final
+  answer in one short phrase.
+architecture: react
+tools:
+- web_search
+max_steps: 3
+reflection_enabled: false
+generation: 0
+parent_hash: null
+notes: 'seed: ReAct with web_search, tight step budget'

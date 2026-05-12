@@ -1,0 +1,10 @@
+{
+  "generations_run": 6,
+  "final_val_accuracy": 0.7,
+  "final_genome_hash": "c13d01d62b",
+  "no_guard": true,
+  "tag": "ablation_v3",
+  "train_n": 15,
+  "val_n": 10,
+  "seed": 42
+}

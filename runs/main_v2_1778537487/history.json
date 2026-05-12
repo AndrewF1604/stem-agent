@@ -1,0 +1,104 @@
+[
+  {
+    "gen": 1,
+    "parent_hash": "893522b8f4",
+    "chosen_hash": "6784b063b3",
+    "accuracy_before": 0.6,
+    "accuracy_after": 0.7,
+    "train_acc_before": 0.4666666666666667,
+    "diagnosis": "The agent answers too early from partial evidence and often misses the exact requested entity or form.",
+    "mutations_tried": [
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A brief self-check can help the agent notice when it is about to output an incomplete or mismatched answer form.",
+        "accuracy": 0.7,
+        "hash": "6784b063b3"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "The prompt should explicitly require matching the exact answer type and continue searching until the specific fact, not a nearby year, country, or related entity, is verified.",
+        "accuracy": 0.6,
+        "hash": "b5cb63cd71"
+      },
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "Some failures come from stopping after one or two searches before disambiguating the exact target, so a small budget increase may help.",
+        "accuracy": 0.5,
+        "hash": "8632ec9539"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "canary regression: 0.83 < 1.0",
+    "cost_usd": 0.0982017,
+    "notes": "",
+    "canary_acc": 0.8333333333333334
+  },
+  {
+    "gen": 2,
+    "parent_hash": "893522b8f4",
+    "chosen_hash": "8632ec9539",
+    "accuracy_before": 0.6,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.7333333333333333,
+    "diagnosis": "The agent often stops on partial or adjacent facts instead of resolving the exact target answer.",
+    "mutations_tried": [
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A slightly larger search budget may help the agent disambiguate exact roles and descriptors instead of settling early.",
+        "accuracy": 0.6,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "Strengthen the instruction to verify the precise asked relation and not answer with a nearby entity or broader category.",
+        "accuracy": 0.5,
+        "hash": "9774e54376"
+      },
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A self-check step can help catch semantically close but incorrect answers before finalizing.",
+        "accuracy": 0.4,
+        "hash": "6784b063b3"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.60)",
+    "cost_usd": 0.09644295,
+    "notes": "",
+    "canary_acc": null
+  },
+  {
+    "gen": 3,
+    "parent_hash": "893522b8f4",
+    "chosen_hash": "8632ec9539",
+    "accuracy_before": 0.6,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.6666666666666666,
+    "diagnosis": "The agent is answering too quickly from partial or incorrect evidence, often missing the exact entity requested.",
+    "mutations_tried": [
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A slightly larger search budget may reduce premature stopping before the agent confirms the exact target fact.",
+        "accuracy": 0.6,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "Strengthen the instructions to verify the exact requested answer type and avoid returning nearby-but-wrong entities.",
+        "accuracy": 0.6,
+        "hash": "453ef9876d"
+      },
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A self-check can help catch semantic mismatches like giving a country name instead of an ancestry adjective or a ship instead of the flotilla.",
+        "accuracy": 0.6,
+        "hash": "6784b063b3"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.60)",
+    "cost_usd": 0.0971694,
+    "notes": "",
+    "canary_acc": null
+  }
+]

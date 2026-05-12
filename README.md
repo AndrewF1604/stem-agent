@@ -43,29 +43,29 @@ The project uses **one** API: OpenAI Responses API with built-in `web_search`. N
 Run in this order — each step depends on the previous:
 
 ```powershell
-# 1. Sanity-check the eval harness with a single-shot baseline (~$0.001, ~1 min)
-.\.venv\Scripts\python.exe eval.py --baseline --n 20
+# 1. Sanity-check the eval harness with a single-shot baseline on test split (~$0.002, ~1 min)
+.\.venv\Scripts\python.exe eval.py --baseline --split test --trials 3
 
-# 2. Run evolution loop (~$0.25, ~5-10 min wallclock)
-.\.venv\Scripts\python.exe evolve.py --generations 6 --val-size 5 --tag main
+# 2. Run evolution loop with new methodology (train=15 / val=10, ~$0.30, ~5 min)
+.\.venv\Scripts\python.exe evolve.py --generations 6 --train-n 15 --val-n 10 --tag main_v2
 
-# 3. Ablation: same loop without regression guard (~$0.30, ~5-10 min)
-.\.venv\Scripts\python.exe evolve.py --generations 6 --val-size 5 --no-guard --tag ablation
+# 3. Ablation: same loop without regression guard (~$0.60, ~10 min)
+.\.venv\Scripts\python.exe evolve.py --generations 6 --train-n 15 --val-n 10 --no-guard --tag ablation_v3
 
-# 4. Final test on held-out questions (~$0.02, ~1 min) — run ONCE on a different seed
-.\.venv\Scripts\python.exe eval.py --final --genome runs/<latest>/best_genome.yaml --n 10 --seed 7
+# 4. Final test with 3 trials each (G_final, G0, single-shot already covered by step 1)
+.\.venv\Scripts\python.exe eval.py --final --genome runs/main_v2_<timestamp>/best_genome.yaml --split test --trials 3
+.\.venv\Scripts\python.exe eval.py --final --genome runs/main_v2_<timestamp>/genome_g0_*.yaml --split test --trials 3
+.\.venv\Scripts\python.exe eval.py --final --genome runs/ablation_v3_<timestamp>/best_genome.yaml --split test --trials 3
 
-# 5. Optional: also test single-shot baseline + initial G0 on the same held-out set for the comparison table
-.\.venv\Scripts\python.exe eval.py --baseline --n 10 --seed 7
-.\.venv\Scripts\python.exe eval.py --final --genome runs/<latest>/genome_g0_*.yaml --n 10 --seed 7
-
-# 6. Generate plots from the run logs
+# 5. Generate plots from the run logs
 .\.venv\Scripts\python.exe plots.py
 ```
 
-All artifacts (genomes, trajectories, metrics) land in `runs/<tag>_<timestamp>/`. Plots land in `runs/fitness_curve.png` and `runs/mutation_breakdown.png`.
+Train/val/test are guaranteed-disjoint by construction — single shuffle of HotpotQA, then sliced. Each run saves `splits_metadata.json` with the exact qids for reproducibility.
 
-Total cost for the full pipeline (steps 1–5) is ≈ $0.60 on `gpt-5.4-mini`.
+All artifacts land in `runs/<tag>_<timestamp>/`. Plots land in `runs/fitness_curve.png` and `runs/mutation_breakdown.png`.
+
+Total cost for the full pipeline ≈ **$2.50** on `gpt-5.4-mini`.
 
 ## Repository layout
 

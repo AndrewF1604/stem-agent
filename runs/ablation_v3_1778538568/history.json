@@ -1,0 +1,206 @@
+[
+  {
+    "gen": 1,
+    "parent_hash": "893522b8f4",
+    "chosen_hash": "8632ec9539",
+    "accuracy_before": 0.5,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.7333333333333333,
+    "diagnosis": "The agent is answering too quickly from partial evidence and often returns an entity or related label instead of the exact requested relation.",
+    "mutations_tried": [
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "One extra search step may let the agent disambiguate exact phrasing before answering without greatly increasing waste.",
+        "accuracy": 0.6,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "Stronger guidance is needed to verify the exact answer type and avoid paraphrase mismatches or nearby-but-wrong entities.",
+        "accuracy": 0.6,
+        "hash": "6fb5b86962"
+      },
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A self-check step can help catch semantic near-misses like country vs. ethnicity or ship vs. formation.",
+        "accuracy": 0.5,
+        "hash": "6784b063b3"
+      }
+    ],
+    "accepted": true,
+    "rollback_reason": null,
+    "cost_usd": 0.0965907,
+    "notes": "",
+    "canary_acc": 0.8
+  },
+  {
+    "gen": 2,
+    "parent_hash": "8632ec9539",
+    "chosen_hash": "732558b333",
+    "accuracy_before": 0.6,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.7333333333333333,
+    "diagnosis": "The agent is over-answering from incomplete evidence and often returns a related but wrong entity instead of the exact requested fact.",
+    "mutations_tried": [
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A small increase in search budget can help the agent disambiguate lookalike facts and confirm the exact answer rather than settling early.",
+        "accuracy": 0.6,
+        "hash": "732558b333"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "Tightening the prompt can push the agent to verify the exact target fact and answer only the requested entity or concept, not a nearby related detail.",
+        "accuracy": 0.5,
+        "hash": "78ef90d257"
+      },
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A brief self-check may reduce premature first-match answers by forcing the agent to compare its candidate against the question target.",
+        "accuracy": 0.4,
+        "hash": "c13d01d62b"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.60)",
+    "cost_usd": 0.0956175,
+    "notes": "",
+    "canary_acc": null
+  },
+  {
+    "gen": 3,
+    "parent_hash": "8632ec9539",
+    "chosen_hash": "c13d01d62b",
+    "accuracy_before": 0.6,
+    "accuracy_after": 0.7,
+    "train_acc_before": 0.6,
+    "diagnosis": "The agent answers too early and often returns an incomplete or mismatched entity instead of the exact target fact.",
+    "mutations_tried": [
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A reflection step can help the agent notice when its proposed answer is too broad or off by specificity before it finalizes.",
+        "accuracy": 0.7,
+        "hash": "c13d01d62b"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "The prompt should explicitly require exact answer matching, including full dates and the specific entity type asked for, not just a related broader/narrower fact.",
+        "accuracy": 0.6,
+        "hash": "f32d5534f8"
+      },
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "One or two extra searches may help disambiguate exact answer wording in multi-hop questions without changing the overall behavior too much.",
+        "accuracy": 0.6,
+        "hash": "732558b333"
+      }
+    ],
+    "accepted": true,
+    "rollback_reason": null,
+    "cost_usd": 0.09435165000000001,
+    "notes": "",
+    "canary_acc": 0.8
+  },
+  {
+    "gen": 4,
+    "parent_hash": "c13d01d62b",
+    "chosen_hash": "8632ec9539",
+    "accuracy_before": 0.7,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.6666666666666666,
+    "diagnosis": "The agent is over-rejecting or hedging after finding an answer, often appending negations instead of returning the supported entity.",
+    "mutations_tried": [
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "Reflection appears to be causing unnecessary second-guessing and self-negating final answers.",
+        "accuracy": 0.6,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "Tighten the instruction to answer directly with the best supported entity and avoid prefixed refusals when evidence is sufficient.",
+        "accuracy": 0.4,
+        "hash": "05d7accbf6"
+      },
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A slightly larger search budget can reduce premature commitment to a wrong entity on multi-hop location and ancestry questions.",
+        "accuracy": 0.3,
+        "hash": "77cc2b62ea"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.70)",
+    "cost_usd": 0.1182396,
+    "notes": "",
+    "canary_acc": null
+  },
+  {
+    "gen": 5,
+    "parent_hash": "c13d01d62b",
+    "chosen_hash": "73505496b5",
+    "accuracy_before": 0.7,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.6,
+    "diagnosis": "The agent is often latching onto a plausible nearby fact or hedging instead of stating the exact target answer.",
+    "mutations_tried": [
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "The prompt should explicitly require answering the asked attribute exactly and forbid substituting adjacent facts or hedging when evidence is sufficient.",
+        "accuracy": 0.6,
+        "hash": "73505496b5"
+      },
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "A self-check may help catch cases where the agent has evidence for the right fact but still outputs a nearby or overly cautious response.",
+        "accuracy": 0.5,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A slightly larger search budget can help the agent confirm the precise target fact instead of stopping after the first plausible hit.",
+        "accuracy": 0.2,
+        "hash": "77cc2b62ea"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.70)",
+    "cost_usd": 0.11553764999999999,
+    "notes": "",
+    "canary_acc": null
+  },
+  {
+    "gen": 6,
+    "parent_hash": "c13d01d62b",
+    "chosen_hash": "8632ec9539",
+    "accuracy_before": 0.7,
+    "accuracy_after": 0.6,
+    "train_acc_before": 0.7333333333333333,
+    "diagnosis": "The agent is over-relying on weak or conflicting evidence and then either hedges or drifts to a nearby wrong entity instead of committing to the best-supported answer.",
+    "mutations_tried": [
+      {
+        "kind": "TOGGLE_REFLECTION",
+        "rationale": "Reflection appears to be causing the agent to second-guess correct answers and replace them with unsupported alternatives or refusals.",
+        "accuracy": 0.6,
+        "hash": "8632ec9539"
+      },
+      {
+        "kind": "ADJUST_MAX_STEPS",
+        "rationale": "A slightly larger search budget can help resolve ambiguous entity questions and reduce premature stopping on partial evidence.",
+        "accuracy": 0.5,
+        "hash": "77cc2b62ea"
+      },
+      {
+        "kind": "REFINE_PROMPT",
+        "rationale": "The prompt should explicitly tell the agent to prefer the most specific supported entity, avoid substituting related-but-wrong names, and give the best answer when evidence is sufficient.",
+        "accuracy": 0.4,
+        "hash": "c0bdb531f9"
+      }
+    ],
+    "accepted": false,
+    "rollback_reason": "no improvement (best=0.60 <= current=0.70)",
+    "cost_usd": 0.11278725,
+    "notes": "",
+    "canary_acc": null
+  }
+]

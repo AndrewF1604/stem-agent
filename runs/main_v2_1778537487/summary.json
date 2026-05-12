@@ -1,0 +1,10 @@
+{
+  "generations_run": 3,
+  "final_val_accuracy": 0.6,
+  "final_genome_hash": "893522b8f4",
+  "no_guard": false,
+  "tag": "main_v2",
+  "train_n": 15,
+  "val_n": 10,
+  "seed": 42
+}

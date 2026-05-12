@@ -1,0 +1,233 @@
+{
+  "genome": {
+    "system_prompt": "You answer multi-hop factual questions concisely. Reply with the final answer in one short phrase.",
+    "architecture": "single_shot",
+    "tools": [],
+    "max_steps": 1,
+    "reflection_enabled": false,
+    "generation": 0,
+    "parent_hash": null,
+    "notes": "seed: minimal single-shot, no tools"
+  },
+  "metrics": {
+    "label": "seed_0",
+    "accuracy": 0.1,
+    "n": 10,
+    "total_cost_usd": 0.00059025,
+    "avg_latency_s": 1.4055896759033204,
+    "avg_steps": 1.0,
+    "wall_time_s": 28.68201494216919
+  },
+  "records": [
+    {
+      "qid": "5a77897f55429949eeb29edc",
+      "question": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?",
+      "gold": "an organ",
+      "answer": "the trumpet",
+      "correct": false,
+      "judge_reasoning": "The candidate answer names the trumpet, but the gold answer is an organ, so the key instrument is wrong.",
+      "cost_usd": 5.295e-05,
+      "latency_s": 2.306670904159546,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?"
+        },
+        {
+          "role": "assistant",
+          "content": "the trumpet"
+        }
+      ]
+    },
+    {
+      "qid": "5ae0132d55429925eb1afc00",
+      "question": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?",
+      "gold": "the George Washington Bridge",
+      "answer": "the New York City Subway BMT Nassau Street Line",
+      "correct": false,
+      "judge_reasoning": "The candidate names the New York City Subway BMT Nassau Street Line, but the gold answer is the George Washington Bridge.",
+      "cost_usd": 6.525e-05,
+      "latency_s": 1.0510351657867432,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?"
+        },
+        {
+          "role": "assistant",
+          "content": "the New York City Subway BMT Nassau Street Line"
+        }
+      ]
+    },
+    {
+      "qid": "5a7129685542994082a3e5fa",
+      "question": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?",
+      "gold": "Vitor Belfort",
+      "answer": "Ronaldo Souza",
+      "correct": false,
+      "judge_reasoning": "The candidate names Ronaldo Souza, but the gold answer is Vitor Belfort, so the key entity does not match.",
+      "cost_usd": 5.82e-05,
+      "latency_s": 2.192209005355835,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?"
+        },
+        {
+          "role": "assistant",
+          "content": "Ronaldo Souza"
+        }
+      ]
+    },
+    {
+      "qid": "5ae762835542997b22f6a711",
+      "question": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? ",
+      "gold": "tip of the Baja California",
+      "answer": "Coahuila",
+      "correct": false,
+      "judge_reasoning": "The candidate answer is wrong: Villa Uni\u00f3n, Sinaloa is named after Villa Uni\u00f3n in Coahuila, but the question asks for the location of the Mexican state after which it is named, which is the tip of the Baja California, not Coahuila.",
+      "cost_usd": 7.11e-05,
+      "latency_s": 1.6040046215057373,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? "
+        },
+        {
+          "role": "assistant",
+          "content": "Coahuila"
+        }
+      ]
+    },
+    {
+      "qid": "5ae2f5b955429928c423957e",
+      "question": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?",
+      "gold": "The Tugurt language",
+      "answer": "Taschelhit",
+      "correct": false,
+      "judge_reasoning": "The gold answer is Tugurt language, while Taschelhit is a different Berber language and not the same entity.",
+      "cost_usd": 5.775000000000001e-05,
+      "latency_s": 1.3471624851226807,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?"
+        },
+        {
+          "role": "assistant",
+          "content": "Taschelhit"
+        }
+      ]
+    },
+    {
+      "qid": "5a81018755429938b6142287",
+      "question": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?",
+      "gold": "Q",
+      "answer": "M, inspired by John Buchan",
+      "correct": false,
+      "judge_reasoning": "The candidate names the inspiration as John Buchan, but it does not correctly identify the fictional head of the British Secret Service division as Q.",
+      "cost_usd": 5.9999999999999995e-05,
+      "latency_s": 0.9020130634307861,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?"
+        },
+        {
+          "role": "assistant",
+          "content": "M, inspired by John Buchan"
+        }
+      ]
+    },
+    {
+      "qid": "5ae7b271554299540e5a564d",
+      "question": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?",
+      "gold": "2002",
+      "answer": "1996",
+      "correct": false,
+      "judge_reasoning": "The candidate answer gives the wrong year; the audio release was in 2002, not 1996.",
+      "cost_usd": 5.7749999999999994e-05,
+      "latency_s": 1.3566443920135498,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?"
+        },
+        {
+          "role": "assistant",
+          "content": "1996"
+        }
+      ]
+    },
+    {
+      "qid": "5a89a74e554299669944a562",
+      "question": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?",
+      "gold": "Oliver Parker",
+      "answer": "Joel Gallen",
+      "correct": false,
+      "judge_reasoning": "The gold answer is Oliver Parker, while the candidate names a different director, Joel Gallen.",
+      "cost_usd": 5.865e-05,
+      "latency_s": 0.781001091003418,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?"
+        },
+        {
+          "role": "assistant",
+          "content": "Joel Gallen"
+        }
+      ]
+    },
+    {
+      "qid": "5adcceda5542990d50227d31",
+      "question": "George Gershwin is an American Composer and Judith Weir is a composer from which country?",
+      "gold": "a British composer",
+      "answer": "Scotland",
+      "correct": false,
+      "judge_reasoning": "The candidate answer names Scotland, but the gold answer is that Judith Weir is British; Scotland is a constituent country of the UK, not the same semantic answer as 'British composer'.",
+      "cost_usd": 6.12e-05,
+      "latency_s": 1.0505647659301758,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "George Gershwin is an American Composer and Judith Weir is a composer from which country?"
+        },
+        {
+          "role": "assistant",
+          "content": "Scotland"
+        }
+      ]
+    },
+    {
+      "qid": "5a7518cb55429916b0164259",
+      "question": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?",
+      "gold": "Rafael M\u00e1rquez",
+      "answer": "Rafael M\u00e1rquez",
+      "correct": true,
+      "judge_reasoning": "The candidate answer exactly matches the gold answer, Rafael M\u00e1rquez.",
+      "cost_usd": 4.74e-05,
+      "latency_s": 1.4645912647247314,
+      "steps": 1,
+      "trajectory": [
+        {
+          "role": "user",
+          "content": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?"
+        },
+        {
+          "role": "assistant",
+          "content": "Rafael M\u00e1rquez"
+        }
+      ]
+    }
+  ]
+}

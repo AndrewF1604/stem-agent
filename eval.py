@@ -40,6 +40,7 @@ class Question:
     question: str
     gold_answer: str
     supporting_facts: list[str] = field(default_factory=list)
+    q_type: str = "unknown"  # comparison or bridge — used for class balance reporting
 
 
 @dataclass
@@ -68,18 +69,19 @@ class JudgedResult:
     trajectory: list[dict]
 
 
-def load_questions(n: int = 30, seed: int = 42, split: str = "validation") -> list[Question]:
-    """Load a deterministic subset of HotpotQA distractor split."""
-    cache_path = DATA_DIR / f"hotpot_{split}_{n}_{seed}.json"
+def _load_filtered_pool(seed: int = 42) -> list[Question]:
+    """Load HotpotQA validation split, shuffle once with seed, filter to
+    comparison/bridge with short answers. Single source of truth for all splits."""
+    cache_path = DATA_DIR / f"hotpot_pool_{seed}.json"
     if cache_path.exists():
         return [Question(**q) for q in json.loads(cache_path.read_text(encoding="utf-8"))]
 
-    ds = load_dataset("hotpot_qa", "distractor", split=split)
+    ds = load_dataset("hotpot_qa", "distractor", split="validation")
     indices = list(range(len(ds)))
     random.Random(seed).shuffle(indices)
 
     questions: list[Question] = []
-    for i in indices[: n * 2]:
+    for i in indices:
         row = ds[i]
         if row.get("type") not in ("comparison", "bridge"):
             continue
@@ -91,13 +93,50 @@ def load_questions(n: int = 30, seed: int = 42, split: str = "validation") -> li
                 question=row["question"],
                 gold_answer=row["answer"],
                 supporting_facts=row["supporting_facts"]["title"],
+                q_type=row["type"],
             )
         )
-        if len(questions) >= n:
+        # cache 200 questions; that's enough for any split combination we'd use
+        if len(questions) >= 200:
             break
 
     cache_path.write_text(json.dumps([asdict(q) for q in questions], indent=2), encoding="utf-8")
     return questions
+
+
+def load_splits(
+    seed: int = 42,
+    train_n: int = 15,
+    val_n: int = 10,
+    test_n: int = 10,
+) -> dict[str, list[Question]]:
+    """Return a guaranteed-disjoint train/val/test split.
+
+    """
+    pool = _load_filtered_pool(seed=seed)
+    if train_n + val_n + test_n > len(pool):
+        raise ValueError(f"Requested split exceeds pool size {len(pool)}")
+    train = pool[:train_n]
+    val = pool[train_n : train_n + val_n]
+    test = pool[train_n + val_n : train_n + val_n + test_n]
+    return {"train": train, "val": val, "test": test}
+
+
+def split_class_balance(splits: dict[str, list[Question]]) -> dict[str, dict[str, int]]:
+    """Count comparison vs bridge in each split for reporting."""
+    balance = {}
+    for name, qs in splits.items():
+        comp = sum(1 for q in qs if q.q_type == "comparison")
+        bridge = sum(1 for q in qs if q.q_type == "bridge")
+        balance[name] = {"total": len(qs), "comparison": comp, "bridge": bridge}
+    return balance
+
+
+# Backward-compat shim: keep load_questions working for old scripts.
+def load_questions(n: int = 30, seed: int = 42, split: str = "validation") -> list[Question]:
+    """Deprecated; use load_splits(). Kept for backward compat with old scripts."""
+    pool = _load_filtered_pool(seed=seed)
+    return pool[:n]
 
 
 def _model_cost_usd(model: str, in_tok: int, out_tok: int, cache_read_tok: int = 0) -> float:
@@ -263,6 +302,41 @@ def evaluate(
     return {"metrics": metrics, "records": [asdict(r) for r in records]}
 
 
+def evaluate_multi_trial(
+    agent_fn: Callable[[str], AgentResult],
+    questions: list[Question],
+    label: str = "eval",
+    n_trials: int = 3,
+    verbose: bool = True,
+) -> dict:
+    """Run evaluate() n_trials times. Returns mean accuracy + std + per-trial breakdown."""
+    trial_results = []
+    for t in range(n_trials):
+        if verbose:
+            print(f"\n[{label}] === Trial {t + 1}/{n_trials} ===")
+        out = evaluate(agent_fn, questions, label=f"{label}_t{t}", verbose=verbose)
+        trial_results.append(out)
+
+    accs = [r["metrics"]["accuracy"] for r in trial_results]
+    mean_acc = sum(accs) / len(accs)
+    var = sum((a - mean_acc) ** 2 for a in accs) / len(accs)
+    std_acc = var ** 0.5
+    total_cost = sum(r["metrics"]["total_cost_usd"] for r in trial_results)
+
+    agg_metrics = {
+        "label": label,
+        "n_trials": n_trials,
+        "accuracy_mean": mean_acc,
+        "accuracy_std": std_acc,
+        "accuracy_per_trial": accs,
+        "accuracy_min": min(accs),
+        "accuracy_max": max(accs),
+        "n_per_trial": len(questions),
+        "total_cost_usd": total_cost,
+    }
+    return {"metrics": agg_metrics, "trials": trial_results}
+
+
 def single_shot_agent(question: str) -> AgentResult:
     """Sanity baseline: just ask the model. No tools, no retrieval."""
     t0 = time.time()
@@ -292,19 +366,42 @@ def main():
     p.add_argument("--baseline", action="store_true", help="Run single-shot baseline")
     p.add_argument("--final", action="store_true", help="Run final test on held-out set")
     p.add_argument("--genome", type=str, default=None, help="Genome YAML to evaluate")
-    p.add_argument("--n", type=int, default=20)
+    p.add_argument("--split", type=str, default="test", choices=["train", "val", "test"],
+                   help="Which split to evaluate on")
+    p.add_argument("--trials", type=int, default=1,
+                   help="Number of independent trials to average (n_trials)")
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--train-n", type=int, default=15)
+    p.add_argument("--val-n", type=int, default=10)
+    p.add_argument("--test-n", type=int, default=10)
     args = p.parse_args()
 
-    questions = load_questions(n=args.n, seed=args.seed)
+    splits = load_splits(seed=args.seed, train_n=args.train_n, val_n=args.val_n, test_n=args.test_n)
+    questions = splits[args.split]
+
+    # report class balance
+    balance = split_class_balance(splits)
+    print(f"\n=== Class balance ===")
+    for name, b in balance.items():
+        print(f"  {name}: total={b['total']}  comparison={b['comparison']}  bridge={b['bridge']}")
+
+    label_base = (
+        "single_shot_baseline" if args.baseline
+        else ("final_test" if args.final else "eval")
+    )
+
+    def run(fn, label):
+        if args.trials > 1:
+            return evaluate_multi_trial(fn, questions, label=label, n_trials=args.trials)
+        return evaluate(fn, questions, label=label)
 
     if args.baseline:
-        out = evaluate(single_shot_agent, questions, label="single_shot_baseline")
+        out = run(single_shot_agent, label=f"{label_base}_{args.split}")
     elif args.final and args.genome:
         from agent import build_agent_fn
         from genome import Genome
         g = Genome.load(args.genome)
-        out = evaluate(build_agent_fn(g), questions, label="final_test")
+        out = run(build_agent_fn(g), label=f"{label_base}_{args.split}")
     else:
         p.print_help()
         return
