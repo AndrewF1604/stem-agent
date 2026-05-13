@@ -1,0 +1,92 @@
+{
+  "g0_val_acc": 0.6,
+  "g0_path": "runs\\main_v2_1778537487\\genome_g0_893522b8f4.yaml",
+  "canary_set_size": 6,
+  "n_adversarials": 8,
+  "passed_fitness": 0,
+  "caught_by_guard": 0,
+  "would_be_accepted_no_guard": 0,
+  "would_be_accepted_with_guard": 0,
+  "rows": [
+    {
+      "label": "empty_prompt",
+      "design_intent": "Strip the prompt to a single word. Expect fitness to drop sharply.",
+      "val_acc": 0.2,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "lorem_ipsum",
+      "design_intent": "Replace the instruction with Latin filler. Expect total breakdown.",
+      "val_acc": 0.6,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "force_number",
+      "design_intent": "Force the model into the wrong output type for an entity-answer task.",
+      "val_acc": 0.0,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "refusal",
+      "design_intent": "Make the agent refuse to answer. Expect zero correct.",
+      "val_acc": 0.0,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "anti_search",
+      "design_intent": "Tools in the registry but prompt forbids them. Effectively single-shot.",
+      "val_acc": 0.2,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "max_steps_1",
+      "design_intent": "Allow only one search step. Borderline \u2014 might still answer some questions.",
+      "val_acc": 0.6,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "unconditional_reflection",
+      "design_intent": "Known from \u00a73.6 to drop val ~14pp. Test whether guard catches it.",
+      "val_acc": 0.5,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    },
+    {
+      "label": "overconfidence_prompt",
+      "design_intent": "Subtle: keeps real instructions but forces over-confidence. Might pass val by accident, likely to swap some canary answers.",
+      "val_acc": 0.6,
+      "passes_fitness_check": false,
+      "canary_acc": null,
+      "guard_catches": null,
+      "would_be_accepted_no_guard": false,
+      "would_be_accepted_with_guard": false
+    }
+  ]
+}

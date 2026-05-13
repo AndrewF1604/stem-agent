@@ -20,12 +20,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from agent import build_agent_fn
-from eval import RUNS_DIR, evaluate, load_splits, split_class_balance
+from eval import RUNS_DIR, evaluate, evaluate_multi_trial, load_splits, split_class_balance
 from genome import Genome, initial_population
 from mutations import Mutation, propose_mutations
 
 PLATEAU_PATIENCE = 3
 ACCURACY_TARGET = 0.85
+EVAL_TRIALS = 1
 
 
 @dataclass
@@ -46,6 +47,26 @@ class GenerationLog:
 
 
 def _eval_genome(genome: Genome, questions, label: str) -> dict:
+    if EVAL_TRIALS > 1:
+        agg = evaluate_multi_trial(
+            build_agent_fn(genome), questions,
+            label=label, n_trials=EVAL_TRIALS, verbose=False,
+        )
+        first = agg["trials"][0]
+        records = first["records"]
+        total_cost = sum(t["metrics"]["total_cost_usd"] for t in agg["trials"])
+        return {
+            "metrics": {
+                "label": label,
+                "accuracy": agg["metrics"]["accuracy_mean"],
+                "accuracy_std": agg["metrics"]["accuracy_std"],
+                "accuracy_per_trial": agg["metrics"]["accuracy_per_trial"],
+                "n": len(records),
+                "total_cost_usd": total_cost,
+                "n_trials": EVAL_TRIALS,
+            },
+            "records": records,
+        }
     return evaluate(build_agent_fn(genome), questions, label=label, verbose=False)
 
 
@@ -231,14 +252,17 @@ def evolve(
 
 
 def main():
+    global EVAL_TRIALS
     p = argparse.ArgumentParser()
     p.add_argument("--generations", type=int, default=6)
     p.add_argument("--train-n", type=int, default=15, help="Training-set size (proposer reads these failures)")
     p.add_argument("--val-n", type=int, default=10, help="Validation-set size (fitness eval)")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--no-guard", action="store_true", help="Ablation: disable regression guard")
+    p.add_argument("--trials", type=int, default=1, help="Trials per genome eval (multi-trial averaging in the loop)")
     p.add_argument("--tag", type=str, default="evolve")
     args = p.parse_args()
+    EVAL_TRIALS = args.trials
     evolve(args.generations, args.no_guard, args.tag, args.seed, args.train_n, args.val_n)
 
 
