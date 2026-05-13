@@ -33,9 +33,9 @@ class GenerationLog:
     gen: int
     parent_hash: str
     chosen_hash: str
-    accuracy_before: float       # val fitness of parent
-    accuracy_after: float        # val fitness of best candidate
-    train_acc_before: float | None  # train accuracy of parent (proposer source)
+    accuracy_before: float
+    accuracy_after: float
+    train_acc_before: float | None
     diagnosis: str
     mutations_tried: list[dict] = field(default_factory=list)
     accepted: bool = False
@@ -85,7 +85,6 @@ def evolve(
     print(f"\n=== Splits (guaranteed disjoint) ===")
     for name, b in split_class_balance(splits).items():
         print(f"  {name}: total={b['total']}  comparison={b['comparison']}  bridge={b['bridge']}")
-    # save splits metadata for the writeup
     (run_dir / "splits_metadata.json").write_text(json.dumps({
         "seed": seed,
         "balance": split_class_balance(splits),
@@ -98,7 +97,6 @@ def evolve(
     current, current_result = _select_initial(seeds, val_q, run_dir)
     current.save(run_dir / f"genome_g0_{current.hash()}.yaml")
 
-    # canary: val questions G0 solves correctly
     canary_questions = [
         q for q, rec in zip(val_q, current_result["records"]) if rec["correct"]
     ]
@@ -113,8 +111,6 @@ def evolve(
             print(f"Stop: val accuracy {current_result['metrics']['accuracy']:.2f} >= target")
             break
 
-        # Run current on TRAIN to source failure trajectories for proposer.
-        # This is the disjointness fix: train ≠ val, proposer never sees val.
         train_result = _eval_genome(current, train_q, label=f"g{gen}_train_failures")
         train_acc = train_result["metrics"]["accuracy"]
         failed = [r for r in train_result["records"] if not r["correct"]]

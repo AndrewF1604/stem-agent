@@ -5,9 +5,13 @@ Two architectures:
   - react: Responses call with built-in web_search; OpenAI executes the search loop
     server-side. We embed `max_steps` in the prompt and (optionally) chain a
     second call for reflection.
+
+Reflection can be unconditional (threshold=1.0), conditional on a self-reported
+confidence below threshold, or off (reflection_enabled=False).
 """
 from __future__ import annotations
 
+import re
 import time
 from typing import Callable
 
@@ -21,6 +25,35 @@ from eval import (
 )
 from genome import Genome
 from tools import schemas_for
+
+
+_CONFIDENCE_RE = re.compile(r"CONFIDENCE:\s*([0-9]*\.?[0-9]+)", re.IGNORECASE)
+
+
+def _parse_confidence(text: str) -> tuple[str, float | None]:
+    """Extract the trailing 'CONFIDENCE: <float>' if present. Return (stripped_answer, confidence)."""
+    m = _CONFIDENCE_RE.search(text)
+    if not m:
+        return text, None
+    try:
+        c = float(m.group(1))
+        if not 0.0 <= c <= 1.0:
+            return text, None
+    except ValueError:
+        return text, None
+    stripped = _CONFIDENCE_RE.sub("", text).strip()
+    return stripped, c
+
+
+def _reflection_mode(genome: Genome) -> str:
+    """Returns one of 'off', 'always', 'conditional'."""
+    if not genome.reflection_enabled:
+        return "off"
+    if genome.reflection_threshold >= 1.0 - 1e-9:
+        return "always"
+    if genome.reflection_threshold <= 0.0 + 1e-9:
+        return "off"
+    return "conditional"
 
 
 def _materialize_prompt(genome: Genome) -> str:
@@ -53,8 +86,19 @@ def _single_shot(genome: Genome) -> Callable[[str], AgentResult]:
 
 
 def _react(genome: Genome) -> Callable[[str], AgentResult]:
-    instructions = _materialize_prompt(genome)
+    base_instructions = _materialize_prompt(genome)
     tools = schemas_for(genome.tools)
+    mode = _reflection_mode(genome)
+
+    if mode == "conditional":
+        instructions = (
+            base_instructions
+            + "\n\nAfter your final answer, write exactly one line:\n"
+              "CONFIDENCE: <a single number between 0.0 and 1.0 indicating "
+              "how confident you are in the answer>"
+        )
+    else:
+        instructions = base_instructions
 
     def fn(question: str) -> AgentResult:
         t0 = time.time()
@@ -68,7 +112,8 @@ def _react(genome: Genome) -> Callable[[str], AgentResult]:
         )
         in_tok, out_tok, cached = _usage(response)
         steps = _count_tool_calls(response)
-        answer = _output_text(response)
+        raw = _output_text(response)
+        answer, confidence = _parse_confidence(raw) if mode == "conditional" else (raw, None)
 
         for item in getattr(response, "output", []) or []:
             t = getattr(item, "type", "")
@@ -79,9 +124,17 @@ def _react(genome: Genome) -> Callable[[str], AgentResult]:
                     if getattr(c, "type", None) in ("output_text", "text"):
                         trajectory.append({"role": "assistant", "content": getattr(c, "text", "")})
 
-        if genome.reflection_enabled and answer:
+        if mode == "always":
+            should_reflect = bool(answer)
+        elif mode == "conditional":
+            c = confidence if confidence is not None else 0.0
+            should_reflect = bool(answer) and c < genome.reflection_threshold
+        else:
+            should_reflect = False
+
+        if should_reflect:
             reflect = call_responses(
-                instructions=instructions,
+                instructions=base_instructions,
                 input_data=(
                     "Briefly reconsider: does the evidence above actually support that answer? "
                     "If yes, repeat it. If no, give the corrected answer. "
@@ -95,7 +148,10 @@ def _react(genome: Genome) -> Callable[[str], AgentResult]:
             out_tok += r_out
             cached += r_cached
             reflected = _output_text(reflect)
-            trajectory.append({"role": "assistant", "content": reflected, "reflection": True})
+            trajectory.append({
+                "role": "assistant", "content": reflected, "reflection": True,
+                "confidence": confidence,
+            })
             answer = reflected or answer
 
         return AgentResult(

@@ -40,7 +40,7 @@ class Question:
     question: str
     gold_answer: str
     supporting_facts: list[str] = field(default_factory=list)
-    q_type: str = "unknown"  # comparison or bridge — used for class balance reporting
+    q_type: str = "unknown"
 
 
 @dataclass
@@ -96,7 +96,6 @@ def _load_filtered_pool(seed: int = 42) -> list[Question]:
                 q_type=row["type"],
             )
         )
-        # cache 200 questions; that's enough for any split combination we'd use
         if len(questions) >= 200:
             break
 
@@ -132,7 +131,6 @@ def split_class_balance(splits: dict[str, list[Question]]) -> dict[str, dict[str
     return balance
 
 
-# Backward-compat shim: keep load_questions working for old scripts.
 def load_questions(n: int = 30, seed: int = 42, split: str = "validation") -> list[Question]:
     """Deprecated; use load_splits(). Kept for backward compat with old scripts."""
     pool = _load_filtered_pool(seed=seed)
@@ -379,7 +377,6 @@ def main():
     splits = load_splits(seed=args.seed, train_n=args.train_n, val_n=args.val_n, test_n=args.test_n)
     questions = splits[args.split]
 
-    # report class balance
     balance = split_class_balance(splits)
     print(f"\n=== Class balance ===")
     for name, b in balance.items():

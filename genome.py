@@ -22,6 +22,7 @@ class Genome(BaseModel):
     tools: list[ToolName] = Field(default_factory=lambda: ["web_search"])
     max_steps: int = 4
     reflection_enabled: bool = False
+    reflection_threshold: float = 1.0
     generation: int = 0
     parent_hash: str | None = None
     notes: str = ""

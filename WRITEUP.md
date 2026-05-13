@@ -46,6 +46,17 @@ Built on the OpenAI Responses API with the built-in `web_search` tool — one AP
 
 The genome is hash-addressable; every accepted mutation writes a new YAML with `parent_hash`, so the lineage is reconstructible. **Train and val are disjoint by construction** — single shuffle of the HotpotQA pool, then slice into `train[:15] / val[15:25] / test[25:35]`. Test is touched only by `eval.py --final`.
 
+## 2.5 Related work
+
+This project sits at the intersection of four threads. Each shaped a specific design decision:
+
+- **ReAct** (Yao et al., 2022, [arXiv:2210.03629](https://arxiv.org/abs/2210.03629)) is the architecture I instantiate for tool use. My one departure: I let the OpenAI Responses API run the search loop server-side rather than implementing the Thought/Action/Observation loop client-side. The trade-off is less per-step control for dramatically simpler infrastructure — the agent still *behaves* as ReAct, but `max_steps` becomes a soft prompt instruction rather than a hard counter.
+- **Reflexion** (Shinn et al., 2023, [arXiv:2303.11366](https://arxiv.org/abs/2303.11366)) advocates a self-check pass after generation. My `TOGGLE_REFLECTION` mutation is a minimal version of this. The §4 finding that *unconditional* reflection harms accuracy is, I think, a real wrinkle the original paper underplays — it works in their setting (long-horizon tasks with episodic memory) but doesn't transfer cleanly to single-turn QA. The §3.6 follow-up with conditional reflection is a direct attempt to recover the upside.
+- **PromptBreeder / EvoPrompt** (Fernando et al., 2023, [arXiv:2309.16797](https://arxiv.org/abs/2309.16797)) treat prompts as a population and evolve them with mutation operators. My evolution loop is a strict subset — single-genome at each step rather than a population, three structured mutation kinds rather than open-ended LLM-generated edits — but adds a **regression guard** (canary check) that PromptBreeder doesn't. §3.5 shows when that guard matters.
+- **Voyager** (Wang et al., 2023, [arXiv:2305.16291](https://arxiv.org/abs/2305.16291)) lets an agent grow a *skill library* by writing executable functions. This is the natural endpoint of my §5 "tool synthesis" follow-up — same pattern, riskier scope (sandboxed code execution). My version stops one level lower: the agent can pick from a fixed tool registry and tune control flow, but can't write new tools yet.
+
+The closest analogue I found to "stem cell agent" framing was **AlphaEvolve** (DeepMind, 2024) for evolving code/algorithms — same metaphor of starting general and specializing through selective pressure. I haven't read enough of their methodology to claim influence, but the framing convergence is worth noting.
+
 ## 3. Experiments
 
 ### 3.1 Methodology
@@ -115,6 +126,29 @@ Gen 1 candidate: TOGGLE_REFLECTION
 
 In the ablation, the same TOGGLE_REFLECTION (gen 3) was accepted, and the agent later ended up at 0.77 on test versus the guard-on agent's 0.87 — a 10-point gap on the held-out set that didn't show up in either run's val score. **That gap is the dollar value of the guard.**
 
+### 3.6 Follow-up — conditional reflection
+
+The §4 reflection finding was: unconditional reflection appeared to harm. The natural fix was to make reflection *conditional* — only trigger when the agent's first answer is low-confidence. I implemented this: extended `Genome` with `reflection_threshold: float`, modified the ReAct loop to ask the model for a self-reported confidence after its first answer, and added a new mutation `ADJUST_REFLECTION_THRESHOLD`. Reflection now fires only when `confidence < threshold`.
+
+Tested 4 variants on val (n=10, 3 trials each):
+
+| Variant                  | Mean ± Std   | Per-trial         | Reflection fired | Confidence range when fired |
+| ------------------------ | :----------: | :---------------: | :--------------: | :-------------------------: |
+| A: reflection off        | 0.57 ± 0.05  | 0.6 / 0.6 / 0.5   | 0 / 30           | —                           |
+| B: unconditional (τ=1.0) | **0.43 ± 0.05** | 0.4 / 0.5 / 0.4 | 30 / 30          | n/a                         |
+| C: conditional τ=0.5     | 0.53 ± 0.05  | 0.5 / 0.6 / 0.5   | **1 / 30**       | (mostly ≥ 0.5)              |
+| D: conditional τ=0.95    | 0.53 ± 0.05  | 0.5 / 0.5 / 0.6   | 10 / 30          | 0.83 – 0.93                 |
+
+Three findings stack into one story.
+
+**First — the harm from reflection scales with how often it fires.** B (always reflect) gives 0.43; D (reflect ~33% of questions) gives 0.53; A (never reflect) gives 0.57. The relationship is roughly monotonic in firing rate, which is the strongest mechanical evidence that the reflection prompt is doing causal work on the output distribution (per §4.1 mechanical analysis) rather than being neutral noise.
+
+**Second — the model is severely overconfident in its own answers.** At τ=0.5, conditional reflection fires only 1/30 times. The model self-reports confidence ≥ 0.5 on essentially every question, including the ones it gets wrong. At τ=0.95, fired-on confidences cluster between 0.83 and 0.93 — the model never reports below 0.83 either. This is the well-known overconfidence pattern in RLHF'd models: they're trained to sound certain. A fixed threshold against self-reported floats is fundamentally the wrong signal.
+
+**Third — conditional reflection *does* recover some of the loss over unconditional**: 0.53 (D) vs 0.43 (B) is a 10pp improvement just from firing less often on more-uncertain cases. But it doesn't beat "never reflect" because the confidence signal can't distinguish uncertain answers reliably enough. The mechanism works (reflection fires when triggered, the threshold gates correctly), but the trigger is too noisy to be net-positive at this scale.
+
+The structural takeaway: a confidence-gated trigger needs a *calibrated* confidence signal. Self-reported floats from an RLHF'd model aren't calibrated. Better signals would be log-probability of the answer token (not available via Responses API), comparative ranking ("which of these two answers do you trust more?"), or external calibration (collect confidence-vs-correctness data, fit an isotonic regression). These are §5 follow-ups now.
+
 ## 4. What surprised me
 
 **Auditing my own methodology found bugs that completely changed the story.** The first iteration of this project (committed as the first GitHub push) reported "evolution 40% → 80%, regression guard never fired". A subsequent audit against ML conventions found train/val overlap (proposer was reading failures from the same 5 questions used for fitness) and a non-guaranteed-disjoint train/test split. After fixing both, the new numbers tell a much more uncomfortable but more honest story: most of the previous "improvement" was the proposer overfitting to the val set it was being evaluated on. The architecture switch (single-shot → ReAct) still does the heavy lifting; the evolution itself is much more modest. **The most useful thing I did in this project was probably going back and breaking my own previous results.**
@@ -136,14 +170,22 @@ In the ablation, the same TOGGLE_REFLECTION (gen 3) was accepted, and the agent 
 
 **Cost was lower than expected and dominated by Phase A + train evals.** Full pipeline (main + ablation + 3 final tests × 3 trials each + baselines) ran for ~$2.50 on `gpt-5.4-mini`. The new methodology adds train-set evals each generation, which roughly doubled per-generation cost compared to the first iteration, but it's still trivial.
 
+### 4.1 Why this happens — mechanical analysis
+
+Three of the surprises above aren't bugs to fix; they're consequences of how the underlying machinery works. Worth being explicit about the mechanics so the patterns are predictable rather than mysterious:
+
+- **Why reflection harms unconditionally.** The reflection prompt is `"Briefly reconsider: does the evidence above actually support that answer?"`. An autoregressive LM responds to the *most recent* context with attention weight roughly proportional to position. The token "reconsider" carries a strong directional bias — when present, the model's next-token distribution shifts toward producing a *change*, not a confirmation, even if the original answer was correct. This is the same mechanism behind chain-of-thought working when you say "let's think step by step" — the prompt is doing causal work on the output distribution. Asking the model to second-guess itself reliably *produces* second-guessing, and on a single-turn answer where the first attempt was already grounded in retrieved citations, the second-guess flips correct answers more often than it rescues wrong ones. The §3.6 experiment tests whether a confidence-gated trigger captures only the cases where second-guessing would have helped.
+- **Why stochasticity is the size of a "real" mutation.** The Responses API samples at temperature > 0 by default (unspecified in our calls). At n=10 questions × bernoulli outcomes, the standard error on a single trial is `sqrt(p*(1-p)/n) ≈ 0.15` even for a deterministic agent. Add LLM-level sampling variance on top — different tool query strings, different tie-breaks between candidate answers — and observed std ~0.19 is exactly what you'd predict from the formula. Setting `temperature=0` would reduce this but also collapse the diversity of search queries the agent uses, which is itself useful for finding the right page. 3-trial averaging is the correct workaround; smaller val sets just don't have the resolution to distinguish "real" mutations from sampling noise.
+- **Why pretraining contamination is large here.** HotpotQA (Yang et al., 2018) has been part of standard pretraining corpora for years. The model doesn't need to "search"; it can pattern-match the question text to memorized gold answers. The single-shot baseline of 0.73 on test is direct evidence: that's accuracy with *no tools*, just the model answering from internal knowledge. The ReAct mode's 0.87 represents at most +0.14 from retrieval; the rest is recall. A truly clean evaluation would use questions written after the model's knowledge cutoff, or a held-out distribution like the GPQA Diamond hard split. Anything older than ~2 years is suspect for this class of model.
+
 ## 5. What I'd do with more time
 
 In priority order, with relative cost:
 
 1. **Use a post-cutoff benchmark to control for pretraining contamination.** This is the single most impactful experiment. Sources: GPQA Diamond questions written after the cutoff, BrowseComp, or hand-constructed multi-hop on recent events. Without this, the held-out test reports a mix of model recall and retrieval, with no way to disentangle.
-2. **Multi-trial averaging inside the evolution loop**, not just for final reporting. Run each candidate 3× on val and use the mean as fitness. At n=10 val and 3 trials, this triples per-generation cost but should eliminate "single answer flip" mutations from being accepted.
-3. **Tool synthesis**, not just selection. Let the mutator write a new Python function when failure analysis surfaces a recurring missing capability ("needs to compute date differences"). Closest analogue to a stem cell *growing* a structure rather than picking from a fixed shelf.
-4. **Conditional reflection.** The audit shows reflection both helps and hurts depending on the question. A trigger like "only reflect if first answer's evidence is thin" should capture the upside without the downside.
+2. **Calibrated confidence for conditional reflection.** §3.6 showed the mechanism works but self-reported confidence isn't a usable signal — the model is overconfident. Two concrete fixes: (a) use log-probabilities of the answer token via a model that exposes them (the Responses API doesn't), or (b) fit an isotonic regression on a confidence-vs-correctness dataset and use the calibrated score as the gate. Either would make conditional reflection net-positive instead of net-neutral.
+3. **Multi-trial averaging inside the evolution loop**, not just for final reporting. Run each candidate 3× on val and use the mean as fitness. At n=10 val and 3 trials, this triples per-generation cost but should eliminate "single answer flip" mutations from being accepted.
+4. **Tool synthesis**, not just selection. Let the mutator write a new Python function when failure analysis surfaces a recurring missing capability ("needs to compute date differences"). Closest analogue to a stem cell *growing* a structure rather than picking from a fixed shelf.
 5. **Adversarial guard test.** Inject hand-crafted bad mutations (random shuffled prompts, max_steps=0, contradictory instructions) and verify the guard catches all of them. With organic proposer mutations we now have proof the guard *can* fire; adversarial input proves the mechanism is sound on inputs that haven't been organically encountered.
 
 ## 6. Reproduction

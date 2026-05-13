@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from eval import _output_text, call_responses
 from genome import Genome
 
-MUTATION_KINDS = ["REFINE_PROMPT", "TOGGLE_REFLECTION", "ADJUST_MAX_STEPS"]
+MUTATION_KINDS = ["REFINE_PROMPT", "TOGGLE_REFLECTION", "ADJUST_MAX_STEPS", "ADJUST_REFLECTION_THRESHOLD"]
 
 
 @dataclass
@@ -36,6 +36,15 @@ class Mutation:
             delta = int(self.payload.get("delta", 0))
             child.max_steps = max(1, min(12, parent.max_steps + delta))
             child.notes = f"ADJUST_MAX_STEPS {parent.max_steps}->{child.max_steps}: {self.rationale[:120]}"
+        elif self.kind == "ADJUST_REFLECTION_THRESHOLD":
+            delta = float(self.payload.get("delta", 0.0))
+            child.reflection_enabled = True
+            new_threshold = max(0.0, min(1.0, parent.reflection_threshold + delta))
+            child.reflection_threshold = new_threshold
+            child.notes = (
+                f"ADJUST_REFLECTION_THRESHOLD {parent.reflection_threshold:.2f}->{new_threshold:.2f}: "
+                f"{self.rationale[:120]}"
+            )
         else:
             raise ValueError(f"unknown mutation kind: {self.kind}")
         return child
@@ -57,10 +66,18 @@ that plausibly address it. Mutations are atomic and chosen from this fixed set:
     at runtime.
   - TOGGLE_REFLECTION: flip the reflection_enabled flag. Use to add a self-check step when
     answers seem hasty, or remove it when reflection is causing flip-flops.
+    When enabled with threshold=1.0 (default), reflection runs unconditionally on every answer.
     Payload: {}.
   - ADJUST_MAX_STEPS: change the step budget by +/-1, +/-2. Use when the agent runs out of
     steps mid-research, OR when it wastes steps on dead-end searches.
     Payload: {"delta": <int>}.
+  - ADJUST_REFLECTION_THRESHOLD: change reflection_threshold by +/-0.1 to +/-0.3.
+    A threshold of 1.0 means "always reflect" (unconditional). A threshold of 0.5 means
+    "only reflect when the model's self-reported confidence is below 0.5" (conditional).
+    A threshold of 0.0 means "never reflect" (same as TOGGLE_REFLECTION off).
+    Implicitly enables reflection when applied. Use this when unconditional reflection
+    seems to hurt: try lowering threshold so reflection only triggers on uncertain answers.
+    Payload: {"delta": <float>}.
 
 Reply with JSON only, schema:
 {

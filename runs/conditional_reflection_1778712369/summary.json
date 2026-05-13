@@ -1,0 +1,32 @@
+{
+  "A_off": {
+    "accuracy_mean": 0.5666666666666667,
+    "accuracy_std": 0.04714045207910316,
+    "accuracy_per_trial": [
+      0.6,
+      0.6,
+      0.5
+    ],
+    "total_cost_usd": 0.05811525000000001
+  },
+  "B_unconditional": {
+    "accuracy_mean": 0.5666666666666667,
+    "accuracy_std": 0.04714045207910316,
+    "accuracy_per_trial": [
+      0.6,
+      0.6,
+      0.5
+    ],
+    "total_cost_usd": 0.0816036
+  },
+  "C_conditional": {
+    "accuracy_mean": 0.5666666666666667,
+    "accuracy_std": 0.04714045207910316,
+    "accuracy_per_trial": [
+      0.5,
+      0.6,
+      0.6
+    ],
+    "total_cost_usd": 0.059489099999999996
+  }
+}

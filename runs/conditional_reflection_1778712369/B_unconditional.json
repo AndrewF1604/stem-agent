@@ -1,0 +1,1083 @@
+{
+  "metrics": {
+    "label": "B_unconditional",
+    "n_trials": 3,
+    "accuracy_mean": 0.5666666666666667,
+    "accuracy_std": 0.04714045207910316,
+    "accuracy_per_trial": [
+      0.6,
+      0.6,
+      0.5
+    ],
+    "accuracy_min": 0.5,
+    "accuracy_max": 0.6,
+    "n_per_trial": 10,
+    "total_cost_usd": 0.0816036
+  },
+  "trials": [
+    {
+      "metrics": {
+        "label": "B_unconditional_t0",
+        "accuracy": 0.6,
+        "n": 10,
+        "total_cost_usd": 0.02569395,
+        "avg_latency_s": 4.318228101730346,
+        "avg_steps": 1.3,
+        "wall_time_s": 54.55087971687317
+      },
+      "records": [
+        {
+          "qid": "5a77897f55429949eeb29edc",
+          "question": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?",
+          "gold": "an organ",
+          "answer": "Yes, guitar.",
+          "correct": false,
+          "judge_reasoning": "The gold answer is an organ, but the candidate \u10de\u10d0\u10e1\u10e3\u10ees \"guitar,\" which is the wrong instrument.",
+          "cost_usd": 0.0022687499999999995,
+          "latency_s": 3.40434193611145,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Guitar."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, guitar.",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae0132d55429925eb1afc00",
+          "question": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?",
+          "gold": "the George Washington Bridge",
+          "answer": "yes, the George Washington Bridge",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies the same bridge as the gold answer; the extra \"yes\" does not change the meaning.",
+          "cost_usd": 0.0027712500000000003,
+          "latency_s": 3.324204683303833,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "the George Washington Bridge"
+            },
+            {
+              "role": "assistant",
+              "content": "yes, the George Washington Bridge",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7129685542994082a3e5fa",
+          "question": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?",
+          "gold": "Vitor Belfort",
+          "answer": "Cezar Ferreira",
+          "correct": false,
+          "judge_reasoning": "The candidate answer names Cezar Ferreira, but the gold answer is Vitor Belfort, so the key entity does not match.",
+          "cost_usd": 0.0035038499999999998,
+          "latency_s": 8.996943712234497,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Cezar Ferreira ([ufc.com](https://www.ufc.com/athlete/cezar-ferreira?language_content_entity=ru&utm_source=openai))"
+            },
+            {
+              "role": "assistant",
+              "content": "Cezar Ferreira",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae762835542997b22f6a711",
+          "question": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? ",
+          "gold": "tip of the Baja California",
+          "answer": "No clear evidence provided",
+          "correct": false,
+          "judge_reasoning": "The candidate is non-committal and does not identify the location of the Mexican state as the tip of the Baja California.",
+          "cost_usd": 0.00343515,
+          "latency_s": 5.695788621902466,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Sinaloa."
+            },
+            {
+              "role": "assistant",
+              "content": "No clear evidence provided",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae2f5b955429928c423957e",
+          "question": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?",
+          "gold": "The Tugurt language",
+          "answer": "yes, Tugurt language",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Tugurt language, which matches the gold answer despite the extra filler word.",
+          "cost_usd": 0.0022845,
+          "latency_s": 3.62249755859375,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Tugurt language"
+            },
+            {
+              "role": "assistant",
+              "content": "yes, Tugurt language",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a81018755429938b6142287",
+          "question": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?",
+          "gold": "Q",
+          "answer": "Major Boothroyd (Q)",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Q, the fictional head of a British Secret Service division, and includes the alternate name Major Boothroyd.",
+          "cost_usd": 0.0022813500000000006,
+          "latency_s": 3.529420852661133,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Q (Major Boothroyd)"
+            },
+            {
+              "role": "assistant",
+              "content": "Major Boothroyd (Q)",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae7b271554299540e5a564d",
+          "question": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?",
+          "gold": "2002",
+          "answer": "No; 2004",
+          "correct": false,
+          "judge_reasoning": "The candidate answer gives 2004, which does not match the gold answer 2002.",
+          "cost_usd": 0.00230025,
+          "latency_s": 2.964623212814331,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1999"
+            },
+            {
+              "role": "assistant",
+              "content": "No; 2004",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a89a74e554299669944a562",
+          "question": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?",
+          "gold": "Oliver Parker",
+          "answer": "Yes, Oliver Parker",
+          "correct": true,
+          "judge_reasoning": "The candidate names Oliver Parker, which matches the gold answer despite the extra confirmation word.",
+          "cost_usd": 0.0023201999999999997,
+          "latency_s": 4.644226312637329,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Oliver Parker"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Oliver Parker",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5adcceda5542990d50227d31",
+          "question": "George Gershwin is an American Composer and Judith Weir is a composer from which country?",
+          "gold": "a British composer",
+          "answer": "United Kingdom",
+          "correct": true,
+          "judge_reasoning": "The candidate answer identifies the country as the United Kingdom, which is equivalent to the gold answer\u2019s \u201ca British composer.\u201d",
+          "cost_usd": 0.0022929,
+          "latency_s": 3.197694778442383,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "George Gershwin is an American Composer and Judith Weir is a composer from which country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "United Kingdom"
+            },
+            {
+              "role": "assistant",
+              "content": "United Kingdom",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7518cb55429916b0164259",
+          "question": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?",
+          "gold": "Rafael M\u00e1rquez",
+          "answer": "Rafael M\u00e1rquez",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer, Rafael M\u00e1rquez.",
+          "cost_usd": 0.00223575,
+          "latency_s": 3.802539348602295,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metrics": {
+        "label": "B_unconditional_t1",
+        "accuracy": 0.6,
+        "n": 10,
+        "total_cost_usd": 0.029679,
+        "avg_latency_s": 4.432239961624146,
+        "avg_steps": 1.7,
+        "wall_time_s": 56.46048140525818
+      },
+      "records": [
+        {
+          "qid": "5a77897f55429949eeb29edc",
+          "question": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?",
+          "gold": "an organ",
+          "answer": "organ",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer semantically, identifying the instrument as an organ.",
+          "cost_usd": 0.0033999,
+          "latency_s": 5.277670621871948,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "organ"
+            },
+            {
+              "role": "assistant",
+              "content": "organ",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae0132d55429925eb1afc00",
+          "question": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?",
+          "gold": "the George Washington Bridge",
+          "answer": "George Washington Bridge",
+          "correct": true,
+          "judge_reasoning": "The candidate names the George Washington Bridge, matching the gold answer despite minor wording differences.",
+          "cost_usd": 0.0035226,
+          "latency_s": 6.57600736618042,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "George Washington Bridge"
+            },
+            {
+              "role": "assistant",
+              "content": "George Washington Bridge",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7129685542994082a3e5fa",
+          "question": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?",
+          "gold": "Vitor Belfort",
+          "answer": "Cezar Ferreira",
+          "correct": false,
+          "judge_reasoning": "The candidate answer names Cezar Ferreira, but the gold answer is Vitor Belfort, so the key entity is wrong.",
+          "cost_usd": 0.0034704,
+          "latency_s": 4.124814987182617,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Cezar Ferreira"
+            },
+            {
+              "role": "assistant",
+              "content": "Cezar Ferreira",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae762835542997b22f6a711",
+          "question": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? ",
+          "gold": "tip of the Baja California",
+          "answer": "Yes, Sinaloa.",
+          "correct": false,
+          "judge_reasoning": "The candidate answer does not identify the location after which Villa Uni\u00f3n was named; the gold answer is the tip of the Baja California, not Sinaloa.",
+          "cost_usd": 0.0018828,
+          "latency_s": 2.8052995204925537,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Sinaloa."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Sinaloa.",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae2f5b955429928c423957e",
+          "question": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?",
+          "gold": "The Tugurt language",
+          "answer": "Yes, Tugurt (Oued Righ Berber)",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Tugurt (Oued Righ Berber), which matches the gold answer The Tugurt language.",
+          "cost_usd": 0.0035524500000000004,
+          "latency_s": 4.738323926925659,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Tugurt (Oued Righ Berber)"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Tugurt (Oued Righ Berber)",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a81018755429938b6142287",
+          "question": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?",
+          "gold": "Q",
+          "answer": "M",
+          "correct": false,
+          "judge_reasoning": "The candidate answer does not match the gold answer; the correct fictional head is Q, not M.",
+          "cost_usd": 0.00355185,
+          "latency_s": 5.649439334869385,
+          "steps": 3,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Q from James Bond"
+            },
+            {
+              "role": "assistant",
+              "content": "M",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae7b271554299540e5a564d",
+          "question": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?",
+          "gold": "2002",
+          "answer": "2003",
+          "correct": false,
+          "judge_reasoning": "The candidate answer gives the wrong year; the gold answer is 2002, not 2003.",
+          "cost_usd": 0.00227085,
+          "latency_s": 3.183758020401001,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1995"
+            },
+            {
+              "role": "assistant",
+              "content": "2003",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a89a74e554299669944a562",
+          "question": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?",
+          "gold": "Oliver Parker",
+          "answer": "Oliver Parker",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer, Oliver Parker.",
+          "cost_usd": 0.0035313,
+          "latency_s": 2.915830373764038,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Oliver Parker"
+            },
+            {
+              "role": "assistant",
+              "content": "Oliver Parker",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5adcceda5542990d50227d31",
+          "question": "George Gershwin is an American Composer and Judith Weir is a composer from which country?",
+          "gold": "a British composer",
+          "answer": "Yes, British",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Judith Weir as British, which matches the gold answer's country of origin.",
+          "cost_usd": 0.0022375500000000005,
+          "latency_s": 6.1746766567230225,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "George Gershwin is an American Composer and Judith Weir is a composer from which country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "British"
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, British",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7518cb55429916b0164259",
+          "question": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?",
+          "gold": "Rafael M\u00e1rquez",
+          "answer": "Rafael M\u00e1rquez",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer, Rafael M\u00e1rquez.",
+          "cost_usd": 0.0022592999999999997,
+          "latency_s": 2.8765788078308105,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metrics": {
+        "label": "B_unconditional_t2",
+        "accuracy": 0.5,
+        "n": 10,
+        "total_cost_usd": 0.02623065,
+        "avg_latency_s": 4.1819812774658205,
+        "avg_steps": 1.3,
+        "wall_time_s": 52.03794741630554
+      },
+      "records": [
+        {
+          "qid": "5a77897f55429949eeb29edc",
+          "question": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?",
+          "gold": "an organ",
+          "answer": "Yes, piano.",
+          "correct": false,
+          "judge_reasoning": "The candidate answers with \"piano,\" which does not match the gold answer \"an organ.\"",
+          "cost_usd": 0.00227295,
+          "latency_s": 3.8867552280426025,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " Jason Regler, stated that he had the idea for the flashing wristbands during a song built around which instrument ?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Fix You played on piano."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, piano.",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae0132d55429925eb1afc00",
+          "question": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?",
+          "gold": "the George Washington Bridge",
+          "answer": "George Washington Bridge",
+          "correct": true,
+          "judge_reasoning": "The candidate names the same entity as the gold answer, with only minor wording differences.",
+          "cost_usd": 0.0031923,
+          "latency_s": 5.275347709655762,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": " The Soul of Buddha is a 1918 American silent romance film shot in a borough  that is the western terminus of what?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "the George Washington Bridge"
+            },
+            {
+              "role": "assistant",
+              "content": "George Washington Bridge",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7129685542994082a3e5fa",
+          "question": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?",
+          "gold": "Vitor Belfort",
+          "answer": "no clear evidence",
+          "correct": false,
+          "judge_reasoning": "The candidate is non-committal and does not identify the Blackzilians fighter; the gold answer is Vitor Belfort.",
+          "cost_usd": 0.0035364000000000003,
+          "latency_s": 6.386959075927734,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Which \"Blackzilians\" fighter is currently competing in the Middleweight division of Ultimate Fighting Championship?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Abus Magomedov"
+            },
+            {
+              "role": "assistant",
+              "content": "no clear evidence",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae762835542997b22f6a711",
+          "question": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? ",
+          "gold": "tip of the Baja California",
+          "answer": "Yes, Sinaloa.",
+          "correct": false,
+          "judge_reasoning": "The candidate answer does not identify the location asked for and instead gives an unrelated confirmation about Sinaloa; the gold answer is the tip of the Baja California.",
+          "cost_usd": 0.00229335,
+          "latency_s": 4.00419545173645,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Were was the Mexican state after which there is Villa Uni\u00f3n, Sinaloa located? "
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Sinaloa."
+            },
+            {
+              "role": "assistant",
+              "content": "Yes, Sinaloa.",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae2f5b955429928c423957e",
+          "question": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?",
+          "gold": "The Tugurt language",
+          "answer": "Temacine Tamazight",
+          "correct": false,
+          "judge_reasoning": "The candidate answer names Temacine Tamazight, but the gold answer is the distinct language Tugurt, so it does not match the expected entity.",
+          "cost_usd": 0.0022999500000000003,
+          "latency_s": 3.99367094039917,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What language, traditionally written with the ancient Libyco-Berber script, is closely related to the Tumzabt and Teggargrent languages?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Tugurt language"
+            },
+            {
+              "role": "assistant",
+              "content": "Temacine Tamazight",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a81018755429938b6142287",
+          "question": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?",
+          "gold": "Q",
+          "answer": "Q Branch head Major Boothroyd",
+          "correct": true,
+          "judge_reasoning": "The candidate identifies Q, the fictional head of the British Secret Service division, and Major Boothroyd is the related name for the character inspired by the one-time missionary.",
+          "cost_usd": 0.0035173500000000003,
+          "latency_s": 4.848320245742798,
+          "steps": 2,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who is the fictional head of a British Secret Service division and for which a one-time missionary was the inspiration for?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Q"
+            },
+            {
+              "role": "assistant",
+              "content": "Q Branch head Major Boothroyd",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5ae7b271554299540e5a564d",
+          "question": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?",
+          "gold": "2002",
+          "answer": "1999",
+          "correct": false,
+          "judge_reasoning": "The candidate gives the wrong year; the audiobook release was 2002, not 1999.",
+          "cost_usd": 0.0022414500000000003,
+          "latency_s": 3.2634117603302,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Phillip Pullman's book set in a parallel universe featuring a character named Lyra Belacqua was put into audio in what year?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "1999"
+            },
+            {
+              "role": "assistant",
+              "content": "1999",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a89a74e554299669944a562",
+          "question": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?",
+          "gold": "Oliver Parker",
+          "answer": "No, it was Oliver Parker",
+          "correct": true,
+          "judge_reasoning": "The candidate names Oliver Parker, which matches the gold answer; the added wording does not change the identified director.",
+          "cost_usd": 0.002322,
+          "latency_s": 3.1587274074554443,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "Who directed the second film in a British series of action comedy film parodying the James Bond secret agent genre with comedy similar to Rowan Atkinson's Mr. Bean character?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Peter Howitt"
+            },
+            {
+              "role": "assistant",
+              "content": "No, it was Oliver Parker",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5adcceda5542990d50227d31",
+          "question": "George Gershwin is an American Composer and Judith Weir is a composer from which country?",
+          "gold": "a British composer",
+          "answer": "British",
+          "correct": true,
+          "judge_reasoning": "The candidate answer matches the gold answer\u2019s key information: Judith Weir is British.",
+          "cost_usd": 0.0022779000000000002,
+          "latency_s": 3.8005237579345703,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "George Gershwin is an American Composer and Judith Weir is a composer from which country?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "British"
+            },
+            {
+              "role": "assistant",
+              "content": "British",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        },
+        {
+          "qid": "5a7518cb55429916b0164259",
+          "question": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?",
+          "gold": "Rafael M\u00e1rquez",
+          "answer": "Rafael M\u00e1rquez",
+          "correct": true,
+          "judge_reasoning": "The candidate answer exactly matches the gold answer, Rafael M\u00e1rquez.",
+          "cost_usd": 0.002277,
+          "latency_s": 3.2019011974334717,
+          "steps": 1,
+          "trajectory": [
+            {
+              "role": "user",
+              "content": "What Was the name of Juan Manuel M\u00e1rquez's  WBO champion holding younger brother?"
+            },
+            {
+              "role": "tool",
+              "name": "web_search_call",
+              "status": "completed"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez"
+            },
+            {
+              "role": "assistant",
+              "content": "Rafael M\u00e1rquez",
+              "reflection": true,
+              "confidence": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
