@@ -5,7 +5,14 @@ __pycache__/
 venv/
 .vscode/
 .idea/
-runs/_*.txt
-data/hotpot_*
 .DS_Store
 
+# Wyniki sweepu (regenerowalne, duże) — nie wersjonujemy
+runs/
+
+# Pliki tymczasowe
+_ollama_pull*.txt
+_demo_qid.txt
+
+# Pośrednie cache HotpotQA (regenerowalne); wersjonujemy tylko samples_*.json
+data/hotpot_*
