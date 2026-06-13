@@ -1,18 +1,42 @@
+# Środowiska wirtualne
+venv/
+.venv/
+env/
 .env
+
+# Pliki tymczasowe Pythona
 __pycache__/
 *.pyc
-.venv/
-venv/
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# IDE
 .vscode/
 .idea/
 .DS_Store
 
-# Wyniki sweepu (regenerowalne, duże) — nie wersjonujemy
-runs/
+# WAŻNE: NIE IGORUJEMY FOLDERU data/ 
+# Folder data/ i pliki .json / .csv muszą trafiać na GitHuba, 
+# aby inni członkowie zespołu mogli pobrać Twoje wygenerowane wyniki 
+# i odpalać skrypty oceniające!
 
-# Pliki tymczasowe
-_ollama_pull*.txt
-_demo_qid.txt
+# Pliki tymczasowe użytkownika
+wiadomosc_dla_zespolu.txt
 
-# Pośrednie cache HotpotQA (regenerowalne); wersjonujemy tylko samples_*.json
-data/hotpot_*
+# Backupy adnotacji i zduplikowane wykresy (regenerowalne przez 05_analyze_results.py)
+*.bak.csv
+data/*.png
